@@ -7,7 +7,6 @@ export default async function Home() {
 
   return (
     <>
-      <div>{JSON.stringify(postList)}</div>
       <div className='mx-auto flex max-w-screen-md flex-col gap-2.5 px-5 py-10'>
         <h2 className='text-3xl font-bold text-[#303030]'>
           {"HEEYEON'S BLOG"}
