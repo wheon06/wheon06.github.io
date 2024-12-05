@@ -1,6 +1,7 @@
 import { TagList } from '@/app/components/tag-list';
 
 interface Props {
+  category: string;
   tags?: string[];
   title: string;
   description: string;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export const PostItem = ({
+  category,
   tags,
   title,
   description,
@@ -18,6 +20,9 @@ export const PostItem = ({
   return (
     <a href={url} className='flex flex-col gap-1 rounded-xl'>
       <div className='flex gap-1.5'>
+        <h3 className='rounded-md bg-green-200 px-1.5 py-1 text-[10px] font-semibold text-green-600'>
+          {category}
+        </h3>
         <TagList labels={tags} />
       </div>
       <div className='flex flex-col'>
