@@ -5,8 +5,8 @@ import { parsePostAbstract } from '@/app/util/parsePostAbstract';
 import { getPostPaths } from '@/app/util/getPostPaths';
 import { PostType } from '@/app/types/post-type';
 
-export const getPostList = async (): Promise<PostType[]> => {
-  const paths: string[] = getPostPaths();
+export const getPostList = async (category?: string): Promise<PostType[]> => {
+  const paths: string[] = getPostPaths(category);
   return await Promise.all(paths.map((postPath) => parsePost(postPath)));
 };
 

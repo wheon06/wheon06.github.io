@@ -1,9 +1,13 @@
-import { getPostList } from '@/app/parsePostAbstract';
+import { getPostList } from '@/app/util/getPostList';
 import { PostItem } from '@/app/components/post-item';
 import { PostType } from '@/app/types/post-type';
 
-export default async function Home() {
-  const postList: PostType[] = await getPostList();
+interface Props {
+  category?: string;
+}
+
+const Home = async ({ category }: Props) => {
+  const postList: PostType[] = await getPostList(category);
 
   return (
     <>
@@ -26,4 +30,6 @@ export default async function Home() {
       </div>
     </>
   );
-}
+};
+
+export default Home;
