@@ -10,7 +10,7 @@ export const getPostList = async (category?: string): Promise<PostType[]> => {
   return await Promise.all(paths.map((postPath) => parsePost(postPath)));
 };
 
-const parsePostDetail = async (postPath: string) => {
+export const parsePostDetail = async (postPath: string) => {
   const file = fs.readFileSync(postPath, 'utf8');
   const { data, content } = matter(file);
   const tags: string[] = data.tags;

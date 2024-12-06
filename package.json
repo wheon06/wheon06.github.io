@@ -9,14 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fec/remark-a11y-emoji": "^4.0.2",
+    "@tailwindcss/typography": "^0.5.15",
     "@types/glob": "^8.1.0",
     "dayjs": "^1.11.13",
     "glob": "^11.0.0",
     "gray-matter": "^4.0.3",
     "next": "14.2.18",
+    "next-mdx-remote": "^5.0.0",
     "react": "^18",
     "react-dom": "^18",
+    "rehype-pretty-code": "^0.14.0",
+    "rehype-slug": "^6.0.0",
     "remark": "^15.0.1",
+    "remark-breaks": "^4.0.0",
+    "remark-gfm": "^4.0.0",
     "remark-html": "^16.0.1"
   },
   "devDependencies": {
