@@ -3,6 +3,7 @@ import { getAllSlugNames } from '@/app/util/getAllSlugNames';
 import { getPostList } from '@/app/util/getPostList';
 import { PostItem } from '@/app/components/post-item';
 import { PostContent } from '@/app/components/post-content';
+import { PostFooter } from '@/app/components/post-footer';
 
 interface Props {
   params: { slug: string };
@@ -32,6 +33,7 @@ const PostDetail = async ({ params }: Props) => {
         />
         <div className='my-2 h-[1%] w-full border border-[#ebebeb]'></div>
         <PostContent post={post} />
+        <PostFooter />
       </div>
     </>
   );
