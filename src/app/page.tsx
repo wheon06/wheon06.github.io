@@ -2,6 +2,7 @@ import { getPostList } from '@/app/util/getPostList';
 import { PostItem } from '@/app/components/post-item';
 import { PostType } from '@/app/types/post-type';
 import { getAllFolderNames } from '@/app/util/getAllFolderNames';
+import { formatKoreanDateToCleanString } from '@/app/util/format-korean-date-to-clean-string';
 
 interface Props {
   category?: string;
@@ -37,19 +38,25 @@ const Home = async ({ category }: Props) => {
             </a>
           ))}
         </div>
-        {postList.map((post) => (
-          <>
-            <div className='my-2 h-[1%] w-full border border-[#ebebeb]'></div>
-            <PostItem
-              category={post.category}
-              tags={post.tags}
-              title={post.title}
-              description={post.description}
-              createdAt={post.dateString}
-              url={post.url}
-            />
-          </>
-        ))}
+        {postList
+          .sort(
+            (a, b) =>
+              formatKoreanDateToCleanString(b.dateString) -
+              formatKoreanDateToCleanString(a.dateString),
+          )
+          .map((post) => (
+            <>
+              <div className='my-2 h-[1%] w-full border border-[#ebebeb]'></div>
+              <PostItem
+                category={post.category}
+                tags={post.tags}
+                title={post.title}
+                description={post.description}
+                createdAt={post.dateString}
+                url={post.url}
+              />
+            </>
+          ))}
       </div>
     </>
   );
