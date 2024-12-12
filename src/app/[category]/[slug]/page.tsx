@@ -21,6 +21,7 @@ const PostDetail = async ({ params }: Props) => {
 
   return (
     <>
+      <div>HEEYEON's BLOG</div>
       <div className='mx-auto flex max-w-screen-md flex-col gap-2.5 px-5 py-10'>
         <PostItem
           category={post.category}
@@ -28,7 +29,6 @@ const PostDetail = async ({ params }: Props) => {
           title={post.title}
           description={post.description}
           createdAt={post.dateString}
-          url={post.url}
         />
         <div className='my-2 h-[1%] w-full border border-[#ebebeb]'></div>
         <PostContent post={post} />

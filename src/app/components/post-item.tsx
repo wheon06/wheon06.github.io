@@ -6,7 +6,7 @@ interface Props {
   title: string;
   description: string;
   createdAt: string;
-  url: string;
+  url?: string;
 }
 
 export const PostItem = ({
