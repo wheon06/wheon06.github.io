@@ -1,0 +1,155 @@
+---
+title: TypeORM과 Soft Delete Cascade
+description: Soft Delete Cascade는 왜 필요하고 어떻게 사용할까
+tags: [NestJS, TypeORM, TypeScript]
+date: 2024-11-15
+---
+
+## Delete의 종류
+
+데이터베이스에서 데이터를 삭제할 땐 `Hard Delete` `Soft Delete` 두가지로 나뉩니다.
+이름에서도 감이 올 수 있듯이 각 단어마다 무게감이 다르게 느껴지지 않으신가요?
+
+### 1. Hard Delete는 무엇일까
+
+`Hard Delete`는 `실제 레코드`를 데이터베이스에서 지워버리는 방법입니다.
+`Soft Delete`를 기존에 몰랐다면 대부분은 `Hard Delete`를 사용하고 있을 가능성이 높아요.
+
+### 2. Soft Delete는 무엇일까
+
+`Soft Delete`는 물리적으로 레코드를 데이터베이스에서 삭제하는 것이 아닌,
+특정 컬럼을 통해 `논리적으로 삭제된 것처럼` 나타내는 방식을 말합니다.
+
+| id  | name  | age  | deleted_at  |
+|-----|-----|-----|-----|
+| 1  | 강아지  | 5  |   |
+| 1  | 고양이  | 4  | 2024-11-15 07:20:00.000  |
+
+위의 데이터베이스처럼 `deleted_at` 이라는 컬럼을 만들고,
+`삭제된 날짜`를 값으로 채우면서 해당 레코드의 삭제 정보를 기록합니다.
+
+## Soft Delete를 사용하는 이유
+
+그럼 저렇게 컬럼을 추가해 가면서 까지 왜 Soft Delete를 사용하는지 의문이 들 수 있다.
+
+만약 사용자가 자신의 게시글을 실수로 지웠다고 복원을 해달라는 문의가 왔다고 가정해보자.
+하지만 이 부분을 내가 `Hard Delete`로 구현해 놓았다면? 노답인 상황이 온다.
+
+따라서 중요한 데이터를 복원하거나 기록과 통계를 위해서라도 데이터를 남겨두는 것이 좋다.
+
+## Cascade는 뭐지?
+
+글 제목에 Cascade라는 수식어가 함께 붙어있다.
+Cascade의 뜻은 "종속"이다. 엔티티나 테이블 간의 관계를 생각하면 된다.
+
+그래서 Delete Cascade라고 하면 종속 관계와 함께 삭제한다는 개념이다.
+
+***
+
+## Setup
+
+> NestJS, TypeORM, TypeScript 환경 기준
+
+테이블 관계는 Team과 Member가 `1:N` 관계를 두고 구현해 보았다.
+그렇다면 Team의 `기본키`를 `외래키`로 가지는 Member들은 Team의 `종속적인 관계`가 되는 것이다.
+
+### 1. 엔티티 작성
+
+member들이 team에 대한 `cascade`라는 것을 명시해 주어야 합니다.
+또한 `Soft Delete`를 위해 `deletedAt` 컬럼을 만들어 주어야 합니다.
+
+`team.entity.ts`는 아래와 같습니다.
+
+```ts {9 , 12-13}
+@Entity()
+export class Team {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+
+  @OneToMany(() => Member, (member) => member.team, { cascade: true })
+  members: Member[];
+
+  @DeleteDateColumn()
+  deletedAt: Date;
+}
+```
+
+### 2. 데이터베이스 연결
+
+`app.module.ts`에 TypeORM의 DB 연결정보를 작성해주고 생성할 엔티티를 넣어줍니다.
+
+`app.module.ts`는 아래와 같습니다.
+
+```ts {10, 12-13}
+@Module({
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'DB종류',
+      host: '호스트',
+      port: 포트,
+      username: '유저',
+      password: '비밀번호',
+      database: 'DB명',
+      entities: [Team, Member],
+    }),
+    TeamModule,
+    MemberModule,
+  ],
+  controllers: [],
+  providers: [],
+})
+export class AppModule {}
+```
+
+`member.entity.ts`는 아래와 같습니다.
+
+```ts {9, 12-13}
+@Entity()
+export class Member {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+
+  @ManyToOne(() => Team, (team) => team.members, { nullable: false })
+  team: Team;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
+}
+```
+
+## 구현하기
+
+team 엔티티와 함께 삭제할 `종속 관계`들을 한 덩어리로 찾아와,
+함께 Soft Delete 하는 개념으로 본다면 이해하기 쉽다.
+
+`team.service.ts`는 아래와 같습니다.
+
+```ts {4, 6}
+async softRemoveTeamById(id: number) {
+    const team = await this.teamRepository.findOne({
+      where: { id: id },
+      relations: ['members'],
+    });
+    return this.teamRepository.softRemove(team);
+}
+```
+
+### 번외
+
+만약 team 아래의 member 아래에도 `하위 자식`들이 더 있다면 아래와 같이 추가하면 된다.
+
+```ts {4}
+async softRemoveTeamById(id: number) {
+    const team = await this.teamRepository.findOne({
+      where: { id: id },
+      relations: ['members', 'members.childrens'],
+    });
+    return this.teamRepository.softRemove(team);
+}
+```
