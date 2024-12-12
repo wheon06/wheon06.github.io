@@ -9,7 +9,7 @@ interface Props {
 export async function generateStaticParams() {
   const categoryNameList = getAllFolderNames('src/app/posts');
   return categoryNameList.map((category) => ({
-    category: category,
+    category: encodeURIComponent(category),
   }));
 }
 
@@ -20,7 +20,7 @@ const Category = async ({ params }: Props) => {
   if (!categoryNameList.includes(decodeURIComponent(category)))
     return NotFound();
 
-  return <Home category={category} />;
+  return <Home params={{ category: decodeURIComponent(category) }} />;
 };
 
 export default Category;
