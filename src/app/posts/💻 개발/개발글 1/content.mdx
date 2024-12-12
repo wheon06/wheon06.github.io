@@ -1,0 +1,162 @@
+---
+title: 개발글 1
+description: 개인 블로그를 만들어볼게요
+tags: [태그1,태그2]
+date: 2024-12-05
+---
+
+### Headless 컴포넌트란?
+***
+##### Headless 컴포넌트는 UI 로직이 없고 데이터 로직만  존재하는 것이다.
+
+> Headless 컴포넌트는 UI 로직과 데이터 로직을 분리함으로써 재사용
+
+##### 덕분에 잦은 UI 변경에 있어서도 수정이 편리하며 변경해야하는 `코드`도 줄일 수 있다.
+
+##### 먼저 Headless 컴포넌트를 사용하지 않은 사례를 보며 차이점을 비교해 나가보도록 하자.
+***
+### Headless 하지 않은 컴포넌트
+```js
+const SomInput = () => {
+	const [value, setValue] = useState('');
+
+    const handleChangeValue = (e) => {
+    	setValue(e.target.value);
+    };
+
+    return (
+    	<div className='input-container'>
+        	<label htmlFor='1'>Name</lable>
+            <input id='1' type='text' value={value} onChange={handleChangeValue} />
+        </div>
+    );
+};
+
+export default SomeInput;
+```
+***
+##### 보이는 것과 같이 데이터 로직과 UI 로직이 하나의 컴포넌트 안에 뭉쳐있다.
+##### 이러한 컴포넌트에서 UI를 수정해야하는 상황이 온다면 컴포넌트 전체를 수정해야하기 때문에 번거로워진다.
+***
+### 데이터 로직
+```javascript
+const [value, setValue] = useState('');
+
+const handleChangeValue = (e) => {
+    setValue(e.target.value);
+};
+```
+
+### UI 로직
+```javascript
+return (
+    <div className='input-container'>
+        <label htmlFor='1'>Name</lable>
+        <input id='1' type='text' value={value} onChange={handleChangeValue} />
+    </div>
+);
+```
+***
+##### 이렇게 데이터 로직과 UI 로직을 3가지 Headless 패턴으로 분리해보자.
+***
+### Compound Component 패턴
+```javascript
+const InputContext = createContext({
+    id: '',
+    value: '',
+    type: 'text',
+    onChange: () => {},
+});
+
+const InputWrapper = ({ id, value, type, onChange, children }) => {
+    const contextValue = { id, value, type, onChange };
+    return (
+        <InputContext.Provider value={contextValue}>
+            {children}
+        </InputContext.Provider>
+    );
+};
+
+const Input = ({ ...props }) => {
+    const { id, value, type, onChange } = useContext(InputContext);
+    return (
+        <input
+            id={id}
+            value={value}
+            type={type}
+            onChange={onChange}
+            {...props}
+        />
+    );
+};
+
+const Label = ({ children, ...props }) => {
+    const { id } = useContext(InputContext);
+    return (
+        <label htmlFor={id} {...props}>
+            {children}
+        </label>
+    );
+};
+
+InputWrapper.Input = Input;
+InputWrapper.Label = Label;
+```
+***
+##### InputContext는 Context API를 통해서 컴포넌트 내부에서 공유될 데이터를 정의한다.
+##### InputWrapper는 부모 컴포넌트를 생성하여 InputContext의 Context API를 공유한다.
+##### Input은 자식 컴포넌트를 만든다. 이 때 자식 컴포넌트들은 Context API를 통해 필요한 상태를 공유받는다.
+***
+### Function as Child 패턴
+```javascript
+const InputHeadless = ({ children }) => {
+    const [value, setValue] = useState('');
+
+    const handleChangeValue = (e) => {
+        setValue(e.target.value);
+    };
+
+    return children({
+        value,
+        onChange: handleChangeValue,
+    });
+};
+
+export default InputHeadless;
+```
+***
+##### Function as Child 패턴은 자식에 어떤 것이 들어올지 모른다고 가정한다. InputHeadless 컴포넌트는 데이터 로직만 갖고 해당 데이터 로직을 자식 함수에 주입한다.
+***
+### Custom Hook 패턴
+```javascript
+export function useInput() {
+    const [value, setValue] = useState('');
+
+    const handleChangeValue = (e) => {
+        setValue(e.target.value);
+    };
+
+    return [value, handleChangeValue];
+}
+```
+```javascript
+function App() {
+    const [value, handleChangeValue] = useInput();
+
+    return (
+        <div className='input-container'>
+            <label htmlFor='1'>Name</label>
+            <input
+                type='text'
+                id='1'
+                value={value}
+                onChange={handleChangeValue}
+            />
+        </div>
+    );
+}
+```
+***
+##### Custom Hook 패턴은 컴포넌트의 데이터 로직을 Custom Hook 으로 만들어 호출하여 사용한다.
+***
+> 이 처럼 데이터 로직과 UI 로직을 분리하여 컴포넌트를 설계하면 UI 변경사항에 대처하기 쉬우며 유지보수성이 향상한다.

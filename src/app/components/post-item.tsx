@@ -1,4 +1,5 @@
 import { TagList } from '@/app/components/tag-list';
+import { TagColor } from '@/app/util/tag-color';
 
 interface Props {
   category: string;
@@ -8,6 +9,8 @@ interface Props {
   createdAt: string;
   url?: string;
 }
+
+type TagColorKeys = keyof typeof TagColor;
 
 export const PostItem = ({
   category,
@@ -20,7 +23,9 @@ export const PostItem = ({
   return (
     <a href={url} className='flex flex-col gap-1 rounded-xl'>
       <div className='flex gap-1.5'>
-        <h3 className='rounded-md bg-green-200 px-1.5 py-1 text-[10px] font-semibold text-green-600'>
+        <h3
+          className={`rounded-md px-1.5 py-1 text-[10px] font-semibold ${Object.keys(TagColor).includes(category.split(' ')[1]) ? TagColor[category.split(' ')[1] as TagColorKeys] : 'bg-gray-200 text-gray-800'}`}
+        >
           {category}
         </h3>
         <TagList labels={tags} />
