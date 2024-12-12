@@ -8,7 +8,7 @@ import remarkGfm from 'remark-gfm';
 
 export const PostContent = async ({ post }: { post: PostType }) => {
   return (
-    <div className='prose'>
+    <div className='prose min-w-full'>
       <MDXRemote
         source={post.content}
         options={{
@@ -16,6 +16,7 @@ export const PostContent = async ({ post }: { post: PostType }) => {
             remarkPlugins: [remarkGfm, remarkA11yEmoji, remarkBreaks],
             rehypePlugins: [
               [
+                // @ts-ignore
                 rehypePrettyCode,
                 {
                   theme: { dark: 'github-dark-dimmed', light: 'github-light' },

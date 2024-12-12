@@ -4,7 +4,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #f1f1f1;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -16,10 +16,103 @@
 
 :root {
   --font-pretendard: 'Pretendard', sans-serif;
+  --shiki-light: #f1e05a;
+
+  code::before,
+  code::after {
+    content: '';
+  }
+
+  blockquote p::before,
+  blockquote p::after {
+    content: '';
+  }
+
+  figure[data-rehype-pretty-code-figure] {
+    @apply border-[var(--foreground)];
+  }
+
+  figure[data-rehype-pretty-code-figure] pre {
+    @apply bg-[var(--shiki-light-bg)];
+  }
+
+  code[data-theme*=' '],
+  code[data-theme*=' '] span {
+    color: var(--shiki-light);
+  }
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-pretendard);
+}
+
+figure[data-rehype-pretty-code-figure] {
+  @apply overflow-clip rounded-xl border border-solid;
+}
+
+figure[data-rehype-pretty-code-figure] pre {
+  overflow-x: auto;
+}
+
+figure[data-rehype-pretty-code-figure] pre [data-line] {
+  @apply text-[0.875rem];
+}
+
+figure[data-rehype-pretty-code-figure],
+figcaption[data-rehype-pretty-code-title] {
+  @apply border-b border-solid border-[var(--foreground)] px-[1.6rem] py-[1rem] text-[1.4rem] font-semibold;
+}
+
+figure[data-rehype-pretty-code-figure] div[data-rehype-pretty-code-title] {
+  @apply border-b border-solid border-[var(--foreground)] px-[1.6rem] py-[1rem] text-[1.4rem] font-semibold;
+}
+
+figure[data-rehype-pretty-code-figure],
+figcaption[data-rehype-pretty-code-caption] {
+  @apply border-t border-solid border-[var(--foreground)] px-[1.6rem] py-[1rem] text-[1.4rem] font-semibold;
+}
+
+figure[data-rehype-pretty-code-figure] div[data-rehype-pretty-code-caption] {
+  @apply border-t border-solid border-[var(--foreground)] px-[1.6rem] py-[1rem] text-[1.4rem] font-semibold;
+}
+
+code[data-line-numbers] {
+  counter-reset: line;
+}
+
+code[data-line-numbers] > span[data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+
+  display: inline-block;
+  width: 0.75rem;
+  margin-right: 1.6rem;
+  text-align: right;
+  color: gray;
+}
+
+code[data-line-numbers-max-digits='2'] > span[data-line]::before {
+  width: 1.6rem;
+}
+
+code[data-line-numbers-max-digits='3'] > span[data-line]::before {
+  width: 2.6rem;
+}
+
+code span[data-highlighted-line] {
+  @apply border-y-0 border-l-2 border-blue-400 bg-indigo-400 bg-opacity-10 pl-[calc(0.5rem-2px)] md:pl-[calc(1rem_-_2px)] dark:border-blue-500 dark:bg-slate-700;
+}
+
+code {
+  @apply rounded-md bg-gray-100 px-1.5 py-1 text-gray-800;
+}
+
+blockquote {
+  @apply border-0 p-0;
+}
+
+blockquote p {
+  @apply m-0 rounded-xl bg-[#f1f1f1] px-6 py-4 font-semibold not-italic;
 }

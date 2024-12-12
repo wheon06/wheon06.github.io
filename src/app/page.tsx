@@ -23,7 +23,7 @@ const Home = async ({ category }: Props) => {
         <div className='flex w-full gap-2'>
           <a
             href='/'
-            className={`rounded-xl p-2 font-semibold hover:bg-[#ebebeb] ${category && '전체' === selectedCategory ? 'bg-[#ebebeb]' : ''}`}
+            className={`rounded-xl p-2 font-semibold text-black hover:bg-[#ebebeb] ${category && '전체' === selectedCategory ? 'bg-[#ebebeb]' : ''}`}
           >
             전체
           </a>
@@ -31,7 +31,7 @@ const Home = async ({ category }: Props) => {
             <a
               key={categoryName}
               href={categoryName}
-              className={`rounded-xl p-2 font-semibold hover:bg-[#ebebeb] ${category && categoryName === selectedCategory ? 'bg-[#ebebeb]' : ''}`}
+              className={`rounded-xl p-2 font-semibold text-black hover:bg-[#ebebeb] ${category && categoryName === selectedCategory ? 'bg-[#ebebeb]' : ''}`}
             >
               {categoryName}
             </a>
