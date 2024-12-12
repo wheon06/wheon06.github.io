@@ -62,6 +62,7 @@ figure[data-rehype-pretty-code-figure] {
 
 figure[data-rehype-pretty-code-figure] pre {
   overflow-x: auto;
+  @apply p-0
 }
 
 figure[data-rehype-pretty-code-figure] pre [data-line] {
