@@ -5,8 +5,7 @@ import { PostType } from '@/app/types/post-type';
 import { CategoryList } from '@/app/posts/category-list';
 import { TagKeysType } from '@/app/types/tag-keys-type';
 import { PostFooter } from '@/app/components/post-footer';
-import { FaGithubSquare } from 'react-icons/fa';
-import Link from 'next/link';
+import { PostHeader } from '@/app/components/post-header';
 
 export async function generateStaticParams() {
   const categoryNameList = findAllCategory('src/app/posts');
@@ -27,13 +26,7 @@ const Home = async ({ params }: Props) => {
   return (
     <>
       <div className='mx-auto flex min-h-screen max-w-screen-md flex-col gap-2.5 px-5 py-10'>
-        <div className='flex w-full justify-between'>
-          <h2 className='text-3xl font-bold text-[#303030]'>HEEYEON'S BLOG</h2>
-          <Link href='https://github.com/wheon06'>
-            <FaGithubSquare size={36} className='text-[#303030]' />
-          </Link>
-        </div>
-
+        <PostHeader />
         <div className='flex w-full gap-2'>
           <a
             href='/blog'

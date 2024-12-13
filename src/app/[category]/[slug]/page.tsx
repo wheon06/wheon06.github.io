@@ -5,6 +5,7 @@ import { PostContent } from '@/app/components/post-content';
 import { PostFooter } from '@/app/components/post-footer';
 import { findAllCategory } from '@/app/util/findAllCategory';
 import { findAllSlugByCategory } from '@/app/util/findAllSlugByCategory';
+import { PostHeader } from '@/app/components/post-header';
 
 export async function generateStaticParams() {
   const categoryNameList = findAllCategory('src/app/posts');
@@ -39,9 +40,7 @@ const PostDetail = async ({ params }: Props) => {
 
   return (
     <div className='mx-auto flex max-w-screen-md flex-col gap-2.5 px-5 py-10'>
-      <a href='/blog' className='mb-10 text-3xl font-bold text-[#303030]'>
-        HEEYEON's BLOG
-      </a>
+      <PostHeader />
       <PostItem
         category={post.category}
         tags={post.tags}
