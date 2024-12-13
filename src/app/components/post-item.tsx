@@ -31,7 +31,7 @@ export const PostItem = ({
       </div>
       <div className='flex flex-col'>
         <h2 className='font-semibold text-[#303030] xl:text-2xl'>{title}</h2>
-        <div className='flex w-full justify-between'>
+        <div className='flex w-full items-end justify-between'>
           <h3 className='truncate text-sm text-[#a4a4a4] xl:text-[16px]'>
             {description}
           </h3>
