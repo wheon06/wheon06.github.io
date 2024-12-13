@@ -3,7 +3,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 
 const pretendard = localFont({
-  src: './fonts/PretendardVariable.ttf',
+  src: './../../public/fonts/PretendardVariable.ttf',
   variable: '--font-pretendard',
   weight: '100 900',
 });
