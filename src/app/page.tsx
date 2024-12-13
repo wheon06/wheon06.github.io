@@ -1,12 +1,14 @@
-import { getAllFolderNames } from '@/app/util/getAllFolderNames';
+import { findAllCategory } from '@/app/util/findAllCategory';
 import { getPostList } from '@/app/util/getPostList';
 import { PostItem } from '@/app/components/post-item';
 import { PostType } from '@/app/types/post-type';
+import { CategoryList } from '@/app/posts/category-list';
+import { TagKeysType } from '@/app/types/tag-keys-type';
 
 export async function generateStaticParams() {
-  const categoryNameList = getAllFolderNames('src/app/posts');
+  const categoryNameList = findAllCategory('src/app/posts');
   return categoryNameList.map((category) => ({
-    category,
+    category: encodeURIComponent(category),
   }));
 }
 
@@ -15,17 +17,16 @@ interface Props {
 }
 
 const Home = async ({ params }: Props) => {
-  const categoryNameList = getAllFolderNames('src/app/posts');
+  const categoryNameList = findAllCategory('src/app/posts');
   const category = params.category || '**';
   const postList: PostType[] = await getPostList(category);
-  console.log(categoryNameList);
 
   return (
     <div className='mx-auto flex max-w-screen-md flex-col gap-2.5 px-5 py-10'>
       <h2 className='text-3xl font-bold text-[#303030]'>HEEYEON'S BLOG</h2>
       <div className='flex w-full gap-2'>
         <a
-          href='/'
+          href='/blog'
           className={`rounded-xl p-2 font-semibold text-black hover:bg-[#ebebeb] ${category === '**' ? 'bg-[#ebebeb]' : ''}`}
         >
           전체
@@ -33,10 +34,10 @@ const Home = async ({ params }: Props) => {
         {categoryNameList.map((categoryName) => (
           <a
             key={categoryName}
-            href={`${categoryName}`}
+            href={`/blog/${categoryName}`}
             className={`rounded-xl p-2 font-semibold text-black hover:bg-[#ebebeb] ${category === categoryName ? 'bg-[#ebebeb]' : ''}`}
           >
-            {categoryName}
+            {CategoryList[categoryName as TagKeysType].label}
           </a>
         ))}
       </div>

@@ -1,22 +1,22 @@
 import Home from '@/app/page';
-import { getAllFolderNames } from '@/app/util/getAllFolderNames';
+import { findAllCategory } from '@/app/util/findAllCategory';
 import NotFound from '@/app/404';
+
+export async function generateStaticParams() {
+  const categoryNameList = findAllCategory('src/app/posts');
+  return categoryNameList.map((category) => ({
+    category: category,
+  }));
+}
 
 interface Props {
   params: { category: string };
 }
 
-export async function generateStaticParams() {
-  const categoryNameList = getAllFolderNames('src/app/posts');
-  return categoryNameList.map((category) => ({
-    category: encodeURIComponent(category),
-  }));
-}
-
 const Category = async ({ params }: Props) => {
   const { category } = params;
 
-  const categoryNameList = getAllFolderNames('src/app/posts');
+  const categoryNameList = findAllCategory('src/app/posts');
   if (!categoryNameList.includes(decodeURIComponent(category)))
     return NotFound();
 

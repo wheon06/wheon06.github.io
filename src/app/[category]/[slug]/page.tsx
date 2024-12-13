@@ -3,48 +3,43 @@ import { getPostList } from '@/app/util/getPostList';
 import { PostItem } from '@/app/components/post-item';
 import { PostContent } from '@/app/components/post-content';
 import { PostFooter } from '@/app/components/post-footer';
-import { getAllFolderNames } from '@/app/util/getAllFolderNames';
-
-interface Props {
-  params: { category: string; slug: string };
-}
+import { findAllCategory } from '@/app/util/findAllCategory';
+import { findAllSlugByCategory } from '@/app/util/findAllSlugByCategory';
 
 export async function generateStaticParams() {
-  const categoryNameList = getAllFolderNames('src/app/posts');
-  const postList = await getPostList();
+  const categoryNameList = findAllCategory('src/app/posts');
 
-  const params = [];
+  const params: { category: string; slug: string }[] = [];
 
   for (const category of categoryNameList) {
-    const postsInCategory = postList.filter(
-      (post) => post.category === category,
-    );
-    for (const post of postsInCategory) {
+    const postNameList = findAllSlugByCategory('src/app/posts/' + category);
+    postNameList.map((postName) => {
       params.push({
-        category: encodeURIComponent(category),
-        slug: encodeURIComponent(post.title),
+        category: category,
+        slug: postName.split('/')[4],
       });
-    }
+    });
   }
 
   return params;
 }
 
+interface Props {
+  params: { category: string; slug: string };
+}
+
 const PostDetail = async ({ params }: Props) => {
   const { category, slug } = params;
-
   const postList = await getPostList();
   const post = postList.find(
-    (post) =>
-      post.category === decodeURIComponent(category) &&
-      post.title === decodeURIComponent(slug),
+    (post) => post.category === category && post.slug === slug,
   );
 
   if (!post) return NotFound();
 
   return (
     <div className='mx-auto flex max-w-screen-md flex-col gap-2.5 px-5 py-10'>
-      <a href='/' className='mb-10 text-3xl font-bold text-[#303030]'>
+      <a href='/blog' className='mb-10 text-3xl font-bold text-[#303030]'>
         HEEYEON's BLOG
       </a>
       <PostItem
@@ -53,6 +48,7 @@ const PostDetail = async ({ params }: Props) => {
         title={post.title}
         description={post.description}
         createdAt={post.dateString}
+        url={post.url}
       />
       <div className='my-2 h-[1%] w-full border border-[#ebebeb]'></div>
       <PostContent post={post} />
