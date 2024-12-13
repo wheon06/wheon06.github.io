@@ -1,0 +1,107 @@
+---
+title: TypeORM과 트랜잭션
+description: TypeORM에서 트랜잭션을 사용하는 방법
+tags: [NestJS, TypeORM, TypeScript]
+date: 2024-10-24
+---
+
+## 트랜잭션 Transaction
+
+> 트랜잭션은 데이터베이스의 상태를 변환시키는 하나의 논리적 기능을 수행하기 위한 작업의 단위 또는 한꺼번에 모두 수행되어야 할 일련의 연산들을 의미한다.
+
+영어 낱말 transaction은 `거래`라는 뜻 입니다.
+
+예를 들어 돈을 주고 물건을 샀는데 물건을 받지 못한다면,
+그 거래는 성사되지 않고 돈을 돌려 받아야 합니다.
+
+이 처럼 과정이 더 이상 분리되지 않는 행위를 `원자적 행위`라고 합니다.
+
+이러한 개념을 데이터베이스와 ORM에서 제공하는 것이 트랜잭션 기술인 것이죠.
+
+### 1. 트랜잭션의 특징, ACID
+
+트랜잭션의 특징을 `4가지`로 `ACID`라 부릅니다.
+
+이론적으로 데이터베이스는 각각의 트랜잭션에 대해
+`원자성(Atomicity)`, `일관성(Consistency)`, `고립성(Isolation)`, `영구성(Durability)`을 보장합니다.
+
+앞서 언급했던 내용도 `원자성`에 포함되어 있는 내용이었다는 것을 알 수 있습니다.
+
+### 2. 트랜잭션은 어떤 상황에서 사용할까?
+
+트랜잭션을 사용하는 이유는 특징 `ACID`를 지키기 위한 것이라는 감은 왔을 겁니다.
+
+하지만 어떤 상황에서 이 트랜잭션을 적용해야 할 지는 쉽게 와닿지 않죠.
+
+상황을 가정하고 코드로 작성해 봅시다.
+
+***
+
+## 구현하기
+
+### 1. 상황
+
+유저가 회원가입을 하고 전화번호, 생년월일 등 상세정보를 입력하는 상황
+
+이 상황에서 왜 트랜잭션이 필요할까요?
+
+만약 유저가 회원가입을 했는데 아이디가 겹치어 가입에 실패했지만,
+유저의 상세정보는 저장이 되는 상황이 올 수 있습니다.
+
+이 처럼 항상 `함께 성공`되고 `함께 실패`해야하는 작업인 상황에서 사용해야 합니다.
+
+### 2. 로직 작성
+
+`user.service.ts`는 아래와 같습니다.
+
+```ts {13-16, 18-23}
+@Injectable()
+export class UserService {
+  construction(
+  	@InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    private readonly userDetailService: UserDetailService,
+  ) {}
+
+  async save(dto: SaveUserWithUserDetail) {
+    try {
+      return await this.userRepository.manager.transaction(
+      	async (manager: EntityManager) => {
+          const user = await manager.save(User, {
+            username: dto.username,
+            password: dto.password,
+          });
+
+          return await this.userDetailService.save({
+            name: dto.name,
+            phone: dto.phone,
+            user: user,
+          }, manager);
+        }
+      )
+    } catch (e) {
+      // 실패 상황 처리
+    }
+  }
+}
+```
+
+두 작업은 `하나의 트랜잭션`으로 수행되어야 하기 때문에 하나의 `manager`를 넘겨주어 같이 사용합니다.
+
+그리고 `manager`를 받은 `userDetailService`는 상세정보를 가입하는 로직을 작성하면 됩니다.
+
+`user-detail.service.ts`는 아래와 같습니다.
+
+```ts
+@Injectable()
+export class UserServiceDetail {
+  construction(
+  	@InjectRepository(UserDetail)
+    private readonly userDetailRepository: Repository<UserDetail>
+  ) {}
+
+  async save(dto: SaveUserDetailDto, manager: EntityManager) {
+    return await manager.transaction.save(dto);
+  }
+}
+```
