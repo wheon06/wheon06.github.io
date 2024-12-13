@@ -30,10 +30,14 @@ export const PostItem = ({
         <TagList labels={tags} />
       </div>
       <div className='flex flex-col'>
-        <h2 className='text-2xl font-semibold text-[#303030]'>{title}</h2>
+        <h2 className='font-semibold text-[#303030] xl:text-2xl'>{title}</h2>
         <div className='flex w-full justify-between'>
-          <h3 className='text-[#a4a4a4]'>{description}</h3>
-          <p className='text-xs font-semibold text-[#a4a4a4]'>{createdAt}</p>
+          <h3 className='truncate text-sm text-[#a4a4a4] xl:text-[16px]'>
+            {description}
+          </h3>
+          <p className='min-w-fit text-xs font-semibold text-[#a4a4a4]'>
+            {createdAt}
+          </p>
         </div>
       </div>
     </a>

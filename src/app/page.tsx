@@ -6,6 +6,7 @@ import { CategoryList } from '@/app/posts/category-list';
 import { TagKeysType } from '@/app/types/tag-keys-type';
 import { PostFooter } from '@/app/components/post-footer';
 import { PostHeader } from '@/app/components/post-header';
+import { formatKoreanDateToCleanString } from '@/app/util/formatKoreanDateToCleanString';
 
 export async function generateStaticParams() {
   const categoryNameList = findAllCategory('src/app/posts');
@@ -25,7 +26,7 @@ const Home = async ({ params }: Props) => {
 
   return (
     <>
-      <div className='mx-auto flex min-h-screen max-w-screen-md flex-col gap-2.5 px-5 py-10'>
+      <div className='mx-auto flex min-h-screen max-w-screen-md flex-col gap-2.5 bg-white px-5 py-10'>
         <PostHeader />
         <div className='flex w-full gap-2'>
           <a
@@ -44,19 +45,25 @@ const Home = async ({ params }: Props) => {
             </a>
           ))}
         </div>
-        {postList.map((post) => (
-          <div key={post.title}>
-            <div className='my-2 h-[1%] w-full border border-[#ebebeb]'></div>
-            <PostItem
-              category={post.category}
-              tags={post.tags}
-              title={post.title}
-              description={post.description}
-              createdAt={post.dateString}
-              url={post.url}
-            />
-          </div>
-        ))}
+        {postList
+          .sort(
+            (a, b) =>
+              Number(formatKoreanDateToCleanString(b.dateString)) -
+              Number(formatKoreanDateToCleanString(a.dateString)),
+          )
+          .map((post) => (
+            <div key={post.title}>
+              <div className='my-2 h-[1%] w-full border border-[#ebebeb]'></div>
+              <PostItem
+                category={post.category}
+                tags={post.tags}
+                title={post.title}
+                description={post.description}
+                createdAt={post.dateString}
+                url={post.url}
+              />
+            </div>
+          ))}
       </div>
       <PostFooter />
     </>
