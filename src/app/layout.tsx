@@ -10,7 +10,9 @@ const pretendard = localFont({
 
 export const metadata: Metadata = {
   title: "HEEYEON'S BLOG",
-  description: '희연이가 기록을 남기는 곳',
+  icons: {
+    icon: '/blog/favicon.png',
+  },
 };
 
 export default function RootLayout({

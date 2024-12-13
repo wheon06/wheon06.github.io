@@ -6,6 +6,7 @@ const nextConfig = {
       ? 'https://wheon06.github.io/blog'
       : '',
   output: 'export',
+  images: { unoptimized: true },
 };
 
 export default nextConfig;
