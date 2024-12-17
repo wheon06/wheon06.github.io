@@ -39,7 +39,7 @@ const PostDetail = async ({ params }: Props) => {
   if (!post) return NotFound();
 
   return (
-    <div className='mx-auto flex max-w-screen-md flex-col gap-2.5 px-5 py-10'>
+    <div className='mx-auto flex max-w-screen-md flex-col gap-2.5 bg-white px-5 py-10'>
       <PostHeader />
       <PostItem
         category={post.category}
