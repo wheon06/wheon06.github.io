@@ -14,14 +14,20 @@ export const metadata: Metadata = {
     icon: '/blog/favicon.png',
   },
   openGraph: {
+    title: "Heeyeon's blog",
+    description: '기록하고 싶은 걸 적는 곳',
     images: [
       {
-        url: '/opengraph-image.png',
+        url: 'https://wheon06.github.io/blog/opengraph-image.png',
         width: 800,
         height: 400,
         alt: 'Opengraph Image',
       },
     ],
+    url: 'https://wheon06.github.io/blog',
+    siteName: "Heeyeon's blog",
+    locale: 'ko_KR',
+    type: 'website',
   },
 };
 
