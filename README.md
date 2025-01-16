@@ -13,3 +13,5 @@
 `Github Page`
 
 [![My Skills](https://skillicons.dev/icons?i=github&theme=light)](https://skillicons.dev)
+
+**pnpm run deploy**
