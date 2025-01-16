@@ -5,9 +5,25 @@ import { parsePostAbstract } from '@/app/util/parsePostAbstract';
 import { getPostPaths } from '@/app/util/getPostPaths';
 import { PostType } from '@/app/types/post-type';
 
+const processString = (post: PostType) => {
+  const processedString = post.dateString
+    .replace('년', '-')
+    .replace('월', '-')
+    .replace('일', '')
+    .replace(/\s+/g, '');
+
+  return dayjs(processedString);
+};
+
 export const getPostList = async (category?: string): Promise<PostType[]> => {
   const paths: string[] = getPostPaths(category);
-  return await Promise.all(paths.map((postPath) => parsePost(postPath)));
+  const allParsePostDetail = await Promise.all(
+    paths.map((postPath) => parsePost(postPath)),
+  );
+  allParsePostDetail.sort(
+    (a, b) => processString(b).unix() - processString(a).unix(),
+  );
+  return allParsePostDetail;
 };
 
 export const parsePostDetail = async (postPath: string) => {
