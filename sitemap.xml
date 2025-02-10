@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>https://wheon06.github.io</loc>
+<lastmod>2025-02-10T06:37:41.538Z</lastmod>
+</url>
+<url>
+<loc>https://wheon06.github.io/develop/about-agile-software-methodology</loc>
+<lastmod>2025-02-07T00:00:00.000Z</lastmod>
+</url>
+<url>
+<loc>https://wheon06.github.io/develop/git-three-merge-differences</loc>
+<lastmod>2025-01-15T00:00:00.000Z</lastmod>
+</url>
+<url>
+<loc>https://wheon06.github.io/develop/typeorm-softdelete-cascade</loc>
+<lastmod>2024-11-15T00:00:00.000Z</lastmod>
+</url>
+<url>
+<loc>https://wheon06.github.io/develop/typeorm-transaction</loc>
+<lastmod>2024-10-24T00:00:00.000Z</lastmod>
+</url>
+<url>
+<loc>https://wheon06.github.io/develop/promise-all-and-async-await</loc>
+<lastmod>2024-09-05T00:00:00.000Z</lastmod>
+</url>
+</urlset>
