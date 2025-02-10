@@ -11,23 +11,26 @@ const pretendard = localFont({
 export const metadata: Metadata = {
   title: "HEEYEON'S BLOG",
   icons: {
-    icon: '/blog/favicon.png',
+    icon: '/favicon.png',
   },
   openGraph: {
     title: "Heeyeon's blog",
     description: '기록하고 싶은 걸 적는 곳',
     images: [
       {
-        url: 'https://wheon06.github.io/blog/opengraph-image.png',
+        url: 'https://wheon06.github.io/opengraph-image.png',
         width: 800,
         height: 400,
         alt: 'Opengraph Image',
       },
     ],
-    url: 'https://wheon06.github.io/blog',
+    url: 'https://wheon06.github.io',
     siteName: "Heeyeon's blog",
     locale: 'ko_KR',
     type: 'website',
+  },
+  verification: {
+    google: 'bnPDXXDictKtaW8HcrIbLAC84zq7LLVnwMWuSaXmtlc',
   },
 };
 

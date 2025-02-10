@@ -1,10 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: '/blog',
+  basePath: '',
   assetPrefix:
-    process.env.NODE_ENV === 'production'
-      ? 'https://wheon06.github.io/blog'
-      : '',
+    process.env.NODE_ENV === 'production' ? 'https://wheon06.github.io' : '',
   output: 'export',
   images: { unoptimized: true },
 };

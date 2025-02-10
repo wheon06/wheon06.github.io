@@ -4,7 +4,7 @@ import { FaGithubSquare } from 'react-icons/fa';
 export const PostHeader = () => {
   return (
     <div className='flex w-full justify-between'>
-      <a href='/blog' className='text-3xl font-bold text-[#303030] '>
+      <a href='/' className='text-3xl font-bold text-[#303030] '>
         HEEYEON'S BLOG
       </a>
       <Link href='https://github.com/wheon06'>

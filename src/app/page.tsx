@@ -29,7 +29,7 @@ const Home = async ({ params }: Props) => {
         <PostHeader />
         <div className='flex w-full gap-2'>
           <a
-            href='/blog'
+            href='/'
             className={`rounded-xl p-2 font-semibold text-black hover:bg-[#ebebeb] ${category === '**' ? 'bg-[#ebebeb]' : ''}`}
           >
             전체
@@ -37,7 +37,7 @@ const Home = async ({ params }: Props) => {
           {categoryNameList.map((categoryName) => (
             <a
               key={categoryName}
-              href={`/blog/${categoryName}`}
+              href={`/${categoryName}`}
               className={`rounded-xl p-2 font-semibold text-black hover:bg-[#ebebeb] ${category === categoryName ? 'bg-[#ebebeb]' : ''}`}
             >
               {CategoryList[categoryName as TagKeysType].label}
