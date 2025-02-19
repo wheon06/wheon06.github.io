@@ -1,0 +1,44 @@
+---
+title: 스프링 JPA, 엔티티를 작성해도 테이블이 자동 생성되지 않는다
+description: 오류 메세지 하나 없는데 테이블이 자동 생성되지 않는다면?
+tags: [SpringBoot, JPA, Java]
+date: 2025-02-19
+---
+
+사실 나는 처음 백엔드를 공부할 때 스프링부트로 공부를 시작했다.
+하지만 회사에서 NestJS를 사용하기에 요즘은 TypeScript에 익숙해진터라
+
+오랜만에 스프링부트를 하고 싶어서 프로젝트를 생성했는데...
+
+#### 정말 아무것도 기억이 나지 않는다.. ㅋㅋㅋㅋ
+
+SupaBase에서 프로젝트 하나를 만들어서 postgresql 연결을 먼저 하려 했는데,
+
+분명 `의존성`도 다 넣었고, `엔티티`도 작성했고 `application.yml`도 작성했는데 테이블이 생성되지 않았다.
+
+```yml
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres
+    username:
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+```
+
+문제는 `폴더 구조`에서 찾을 수 있었다. NestJS 폴더구조에 너무 익숙해졌는지 전부 루트경로에 넣고 있었다.
+// ~~JS는 루트경로에 .env 파일을 넣어둔다~~
+
+***
+
+## 올바른 폴더 구조
+
+![올바른 폴더 구조](/assets/spring-jpa-no-generate-table/spring-jpa-no-generate-table-1.png)
+
+**com.~~.프로젝트명 아래에 엔티티 폴더를 두고 resources 아래에 yml 파일을 두니 정상 작동 하였다.**
