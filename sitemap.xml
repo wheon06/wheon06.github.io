@@ -2,7 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://wheon06.github.io</loc>
-<lastmod>2025-02-10T06:37:41.538Z</lastmod>
+<lastmod>2025-02-19T01:21:38.682Z</lastmod>
+</url>
+<url>
+<loc>https://wheon06.github.io/develop/spring-jpa-no-generate-table</loc>
+<lastmod>2025-02-19T00:00:00.000Z</lastmod>
 </url>
 <url>
 <loc>https://wheon06.github.io/develop/about-agile-software-methodology</loc>
